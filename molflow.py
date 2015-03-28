@@ -40,8 +40,8 @@ for i in range(N):
             nRejected += 1
             break
 
-        remainder = simulation.traceSegment(distance, remainder, dx, p, s, nArr,
-            origin, nPoints)
+        remainder = simulation.traceSegment(distance, remainder, dx, p, s,
+                                            nArr, origin, nPoints)
 
         # Break out if the particle has exited
         if idx == 0:
@@ -52,15 +52,16 @@ for i in range(N):
 
         p, s = pNew, sNew
 
-print('{0} particles transmitted, {1} particles rejected'.format(nB,
-    nRejected))
+print('{0} particles transmitted, {1} particles rejected'
+      .format(nB, nRejected))
 print('Transmission probability Pr = ' + str(nB / (N - nRejected)))
 
 # Save computation results to a file
-if len(sys.argv) > 5: filename = sys.argv[5]
-else: filename = 'output.npz'
+if len(sys.argv) > 5:
+    filename = sys.argv[5]
+else:
+    filename = 'output.npz'
 f = open(filename, 'wb')
-np.savez(f, X = grid[0], Y = grid[1], Z = grid[2], C = nArr)
+np.savez(f, X=grid[0], Y=grid[1], Z=grid[2], C=nArr)
 f.close()
 print('Heatmap saved to ' + filename + '.')
-
