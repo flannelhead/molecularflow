@@ -4,7 +4,7 @@ import elbow
 import simulation
 
 if len(sys.argv) < 5:
-    print('Usage: python molflow.py A B N dx <outfile>')
+    print('Usage: python molecularflow.py A B N dx <outfile>')
     sys.exit(0)
 
 # Dimensions of the elbow tube
