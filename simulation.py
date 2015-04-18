@@ -16,7 +16,7 @@ def lambertDirection():
 
 # Generate a velocity from the Maxwell-Boltzmann distribution
 def mbVelocity(T, km, useMean=True):
-    if expVal:
+    if useMean:
         return maxwell.mean(scale=sqrt(km*T))
     else:
         return maxwell.ppf(rnd.random(), scale=sqrt(km*T))
