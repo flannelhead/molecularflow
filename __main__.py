@@ -18,7 +18,7 @@ parser.add_argument('-T', type=float, help='Temperature of the system [K]',
                     default=300)
 parser.add_argument('--grid-size', type=float, help='Grid size [m]',
                     default=0.2)
-parser.add_argument('--dt', type=float, help='Grid size [m]',
+parser.add_argument('--dt', type=float, help='Timestep [s]',
                     default=1e-3)
 parser.add_argument('--sample-mb', dest='sambleMB',
                     action='store_true',
