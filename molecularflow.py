@@ -54,10 +54,8 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=1e-3,
 
     # Save the computation results to a file
     if filename is not None:
-        f = open(filename, 'wb')
-        np.savez(f, X=grid[0], Y=grid[1], Z=grid[2], C=nArr,
+        np.savez(filename, X=grid[0], Y=grid[1], Z=grid[2], C=nArr,
                  Pr=np.array([Pr]))
-        f.close()
         print('Results saved to ' + filename + '.')
 
     return Pr, grid, nArr
