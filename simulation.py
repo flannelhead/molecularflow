@@ -8,23 +8,23 @@ a = 8 / pi
 
 
 # Generate a random scattering angle
-def lambertDirection():
+def cosineDirection():
     phi = 2.0 * pi * rnd.random()
     theta = asin(sqrt(rnd.random()))
     return np.array([sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta)])
 
 
-# Generate a velocity from the Maxwell-Boltzmann distribution
-def mbVelocity(T, km, useMean=True):
-    if useMean:
-        return maxwell.mean(scale=sqrt(km*T))
-    else:
+# Generate a speed from the Maxwell-Boltzmann distribution
+def mbSpeed(T, km, sampleMB=False):
+    if sampleMB:
         return maxwell.ppf(rnd.random(), scale=sqrt(km*T))
+    else:
+        return maxwell.mean(scale=sqrt(km*T))
 
 
 # Generate a scattering direction with respect to a given surface
 def newDirection(basis):
-    return basis.dot(lambertDirection())
+    return basis.dot(cosineDirection())
 
 
 # Create a cube grid for recording the particle locations
@@ -37,13 +37,13 @@ def cubeGrid(dimensions, origin, cellSize):
 
 
 # Trace a segment of a particle's travel
-def traceSegment(distance, remainder, dx, dt, p, s, v, arr, origin, nPoints):
+def traceSegment(distance, remainder, dx, dt, p, s, v, arr, offset, nPoints):
     ds = v * dt
-    srem = v * remainder
-    nSteps = int((distance - srem) / ds)
-    sampleDistances = np.linspace(0, nSteps * ds, nSteps + 1) + srem
+    sRemainder = v * remainder
+    nSteps = int((distance - sRemainder) / ds)
+    sampleDistances = np.linspace(0, nSteps * ds, nSteps + 1) + sRemainder
     for S in sampleDistances:
-        i = np.maximum(np.minimum(np.floor((p + S * s - origin) / dx),
+        i = np.maximum(np.minimum(np.floor((p + S * s - offset) / dx),
                        nPoints - 1), 0)
         arr[i[0], i[1], i[2]] += 1
-    return ((nSteps + 1) * ds + srem - distance) / v
+    return ((nSteps + 1) * ds + sRemainder - distance) / v

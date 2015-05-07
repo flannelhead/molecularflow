@@ -1,6 +1,6 @@
 from math import sqrt
 import numpy as np
-import simulation
+from . import simulation
 
 # Functions to handle the geometry of a cylindrical elbow pipe with radius
 # 1 and dimensions A, B
@@ -22,14 +22,13 @@ eps = 1e-8
 
 
 # Generates a new particle at opening A with a random direction
-def newParticle(A, T, km):
+def newParticle(A):
     while True:
         yz = 2 * np.random.rand(2) - 1
         if yz.dot(yz) < 1:
             break
     return (np.array([A, yz[0], yz[1]]),
-            simulation.newDirection(openingABasis),
-            simulation.mbVelocity(T, km))
+            simulation.newDirection(openingABasis))
 
 
 openingABasis = np.array([[0, 0, -1], [0, 1, 0], [1, 0, 0]])
@@ -90,7 +89,7 @@ def handleDistance(S):
 # 1: opening B
 # 2: pipe A
 # 3: pipe B
-def nextCollision(p, s, A, B, T, km):
+def nextCollision(p, s, A, B):
     pB, sB = permXY.dot(p), permXY.dot(s)
     distances = [handleDistance(S) for S in [
         distanceToOpeningA(p, s, A), distanceToOpeningA(pB, sB, B),
@@ -102,7 +101,6 @@ def nextCollision(p, s, A, B, T, km):
         idx = -1
 
     pNew = p + Smin * s
-    vNew = simulation.mbVelocity(T, km)
     if idx == 2:
         sNew = simulation.newDirection(pipeABasis(pNew))
     elif idx == 3:
@@ -110,4 +108,4 @@ def nextCollision(p, s, A, B, T, km):
     else:
         sNew = None
 
-    return Smin, idx, pNew, sNew, vNew
+    return Smin, idx, pNew, sNew

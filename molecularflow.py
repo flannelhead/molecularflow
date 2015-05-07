@@ -1,76 +1,63 @@
-import sys
 import numpy as np
 from scipy import constants
-import elbow
-import simulation
+from . import elbow
+from . import simulation
 
-if len(sys.argv) < 5:
-    print('Usage: python molecularflow.py A B N dx <outfile>')
-    sys.exit(0)
 
-T = 293  # room temperature
-km = constants.k / (28 * constants.value('atomic mass constant'))  # nitrogen
-Q = 0.01  # Flow rate
+def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=1e-3,
+                  MAX_COLLISIONS=50, sampleMB=False, filename=None):
+    km = constants.k / (Z * constants.value('atomic mass constant'))
 
-# Dimensions of the elbow tube
-A = float(sys.argv[1])
-B = float(sys.argv[2])
+    # Define the problem domain
+    offset = np.array([-1, -1, -1])
+    dimensions = np.array([A + 1, B + 1, 2])
+    nArr, grid, nPoints = simulation.cubeGrid(dimensions, offset, dx)
 
-# Number of tracked particles
-N = int(sys.argv[3])
-# Maximum number of collisions before we stop tracking a particle
-MAX_COLLISIONS = 50
-dt = 0.0003
+    # Number of transmitted particles
+    nB = 0
+    nRejected = 0
 
-# Define the problem domain
-origin = np.array([-1, -1, -1])
-dimensions = np.array([A + 1, B + 1, 2])
-dx = float(sys.argv[4])
-nArr, grid, nPoints = simulation.cubeGrid(dimensions, origin, dx)
+    print('Computing with A={0}, B={1}, N={2}'.format(A, B, N))
 
-# Number of transmitted particles
-nB = 0
-nRejected = 0
+    for i in range(N):
+        p, s = elbow.newParticle(A)
+        v = simulation.mbSpeed(T, km, sampleMB)
+        remainder = 0
 
-print('Computing with A={0}, B={1}, N={2}'.format(A, B, N))
+        for j in range(MAX_COLLISIONS):
+            distance, idx, pNew, sNew = elbow.nextCollision(p, s, A, B)
+            vNew = simulation.mbSpeed(T, km, sampleMB)
 
-for i in range(N):
-    p, s, v = elbow.newParticle(A, T, km)
-    remainder = 0
+            # Stop if the particle was rejected
+            if idx == -1:
+                nRejected += 1
+                break
 
-    for j in range(MAX_COLLISIONS):
-        distance, idx, pNew, sNew, vNew = elbow.nextCollision(p, s,
-                                                              A, B, T, km)
+            remainder = simulation.traceSegment(distance, remainder, dx, dt, p,
+                                                s, v, nArr, offset, nPoints)
 
-        # Stop if there's no next collision
-        if idx == -1:
-            nRejected += 1
-            break
+            # Break out if the particle has exited
+            if idx == 0:
+                break
+            elif idx == 1:
+                nB += 1
+                break
 
-        remainder = simulation.traceSegment(distance, remainder, dx, dt, p,
-                                            s, v, nArr, origin, nPoints)
+            p, s, v = pNew, sNew, vNew
 
-        # Break out if the particle has exited
-        if idx == 0:
-            break
-        elif idx == 1:
-            nB += 1
-            break
+    nArr *= Q*dt / (N * dx**3 * T * constants.k)
+    Pr = nB / (N - nRejected)
 
-        p, s, v = pNew, sNew, vNew
+    print('{0} particles transmitted, {1} particles rejected'
+          .format(nB, nRejected))
+    print('Transmission probability Pr = ' + str(nB / (N - nRejected)))
 
-print('{0} particles transmitted, {1} particles rejected'
-      .format(nB, nRejected))
-print('Transmission probability Pr = ' + str(nB / (N - nRejected)))
+    # Save the computation results to a file
+    if filename is not None:
+        f = open(filename, 'wb')
+        np.savez(f, X=grid[0], Y=grid[1], Z=grid[2], C=nArr,
+                 Pr=np.array([Pr]))
+        f.close()
+        print('Results saved to ' + filename + '.')
 
-nArr *= Q*dt / (N * dx**3 * constants.k * T)
-
-# Save the computation results to a file
-if len(sys.argv) > 5:
-    filename = sys.argv[5]
-else:
-    filename = 'output.npz'
-f = open(filename, 'wb')
-np.savez(f, X=grid[0], Y=grid[1], Z=grid[2], C=nArr)
-f.close()
-print('Heatmap saved to ' + filename + '.')
+    return Pr, grid, nArr
