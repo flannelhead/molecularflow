@@ -50,7 +50,7 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=1e-3,
 
     print('{0} particles transmitted, {1} particles rejected'
           .format(nB, nRejected))
-    print('Transmission probability Pr = ' + str(nB / (N - nRejected)))
+    print('Transmission probability Pr = ' + str(Pr))
 
     # Save the computation results to a file
     if filename is not None:
