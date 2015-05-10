@@ -4,7 +4,7 @@ from . import elbow
 from . import simulation
 
 
-def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=1e-3,
+def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
                   MAX_COLLISIONS=50, sampleMB=False, filename=None):
     km = constants.k / (Z * constants.value('atomic mass constant'))
 
@@ -12,6 +12,7 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=1e-3,
     offset = np.array([-1, -1, -1])
     dimensions = np.array([A + 1, B + 1, 2])
     nArr, grid, nPoints = simulation.cubeGrid(dimensions, offset, dx)
+    dt *= dx / simulation.mbSpeed(T, km)
 
     # Number of transmitted particles
     nB = 0
