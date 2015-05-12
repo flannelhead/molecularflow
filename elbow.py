@@ -37,8 +37,10 @@ openingABasis = np.array([[0, 0, -1], [0, 1, 0], [1, 0, 0]])
 # Returns a local Cartesian basis of the surface of pipe A such that the third
 # axis is the normal
 def pipeABasis(pos):
-    return np.array([[1, 0, 0], [0, -pos[2], -pos[1]],
-                     [0, pos[1], -pos[2]]]) / np.linalg.norm(pos[1:3])
+    norm = np.linalg.norm(pos[1:3])
+    a = pos[2] / norm
+    b = pos[1] / norm
+    return np.array([[1, 0, 0], [0, -a, -b], [0, b, -a]])
 
 
 permXY = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]])
