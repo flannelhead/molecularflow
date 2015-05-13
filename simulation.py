@@ -37,8 +37,10 @@ def cubeGrid(dimensions, origin, cellSize):
 
 # Trace a segment of a particle's travel
 def traceSegment(distance, remainder, dx, dt, p, s, v, arr, offset, nPoints):
-    ds = v * dt
     sRemainder = v * remainder
+    if distance - sRemainder < 0:
+        return remainder - distance / v
+    ds = v * dt
     nSteps = int((distance - sRemainder) / ds)
     sampleDistances = np.linspace(0, nSteps * ds, nSteps + 1) + sRemainder
     for S in sampleDistances:
