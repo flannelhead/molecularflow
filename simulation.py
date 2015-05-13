@@ -3,6 +3,8 @@ import numpy as np
 from math import pi, sqrt, sin, cos, asin
 from scipy.stats import maxwell
 
+a = 8 / pi
+
 
 # Generate a random scattering angle
 def cosineDirection():
@@ -12,11 +14,11 @@ def cosineDirection():
 
 
 # Generate a speed from the Maxwell-Boltzmann distribution
-def mbSpeed(T, km, sampleMB=False):
+def mbSpeed(T, kOverM, sampleMB=False):
     if sampleMB:
-        return maxwell.ppf(rnd.random(), scale=sqrt(km*T))
+        return maxwell.ppf(rnd.random(), scale=sqrt(kOverM*T))
     else:
-        return maxwell.mean(scale=sqrt(km*T))
+        return sqrt(a*kOverM*T)
 
 
 # Generate a scattering direction with respect to a given surface

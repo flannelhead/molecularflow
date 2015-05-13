@@ -6,13 +6,13 @@ from . import simulation
 
 def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
                   MAX_COLLISIONS=50, sampleMB=False, filename=None):
-    km = constants.k / (Z * constants.value('atomic mass constant'))
+    kOverM = constants.k / (Z * constants.value('atomic mass constant'))
 
     # Define the problem domain
     offset = np.array([-1, -1, -1])
     dimensions = np.array([A + 1, B + 1, 2])
     nArr, grid, nPoints = simulation.cubeGrid(dimensions, offset, dx)
-    dt *= dx / simulation.mbSpeed(T, km)
+    dt *= dx / simulation.mbSpeed(T, kOverM)
 
     # Number of transmitted particles
     nB = 0
@@ -22,12 +22,12 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
 
     for i in range(N):
         p, s = elbow.newParticle(A)
-        v = simulation.mbSpeed(T, km, sampleMB)
+        v = simulation.mbSpeed(T, kOverM, sampleMB)
         remainder = 0
 
         for j in range(MAX_COLLISIONS):
             distance, idx, pNew, sNew = elbow.nextCollision(p, s, A, B)
-            vNew = simulation.mbSpeed(T, km, sampleMB)
+            vNew = simulation.mbSpeed(T, kOverM, sampleMB)
 
             # Stop if the particle was rejected
             if idx == -1:
