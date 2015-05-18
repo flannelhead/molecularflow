@@ -3,8 +3,6 @@ import numpy as np
 from math import pi, sqrt, sin, cos, asin
 from scipy.stats import maxwell
 
-a = 8 / pi
-
 
 # Generate a random scattering angle
 def cosineDirection():
