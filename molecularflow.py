@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import constants
+import random as rnd
 from . import elbow
 from . import simulation
 
@@ -23,7 +24,7 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
     for i in range(N):
         p, s = elbow.newParticle(A)
         v = simulation.mbSpeed(T, kOverM, sampleMB)
-        remainder = 0
+        remainder = dt * rnd.random()
 
         for j in range(MAX_COLLISIONS):
             distance, idx, pNew, sNew = elbow.nextCollision(p, s, A, B)
