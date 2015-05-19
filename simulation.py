@@ -16,7 +16,7 @@ def mbSpeed(T, kOverM, sampleMB=False):
     if sampleMB:
         return maxwell.ppf(rnd.random(), scale=sqrt(kOverM*T))
     else:
-        return maxwell.mean(scale=kOverM*T)
+        return maxwell.mean(scale=sqrt(kOverM*T))
 
 
 # Generate a scattering direction with respect to a given surface
