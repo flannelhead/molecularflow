@@ -5,15 +5,15 @@ from . import elbow
 from . import simulation
 
 
-def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
+def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, gridSize=0.2, dt=3,
                   MAX_COLLISIONS=50, sampleMB=False, filename=None):
     kOverM = constants.k / (Z * constants.value('atomic mass constant'))
 
     # Define the problem domain
     offset = np.array([-1, -1, -1])
     dimensions = np.array([A + 1, B + 1, 2])
-    nArr, grid, nPoints = simulation.cubeGrid(dimensions, offset, dx)
-    dt *= dx / simulation.mbSpeed(T, kOverM)
+    nArr, grid, nPoints = simulation.cubeGrid(dimensions, offset, gridSize)
+    dt *= gridSize / simulation.mbSpeed(T, kOverM)
 
     # Number of transmitted particles
     nB = 0
@@ -35,8 +35,9 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
                 nRejected += 1
                 break
 
-            remainder = simulation.traceSegment(distance, remainder, dx, dt, p,
-                                                s, v, nArr, offset, nPoints)
+            remainder = simulation.traceSegment(distance, remainder, gridSize,
+                                                dt, p, s, v, nArr, offset,
+                                                nPoints)
 
             # Break out if the particle has exited
             if idx == 0:
@@ -47,7 +48,7 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=10000, dx=0.2, dt=3,
 
             p, s, v = pNew, sNew, vNew
 
-    nArr *= Q*dt / (N * dx**3 * T * constants.k)
+    nArr *= Q*dt / (N * gridSize**3 * T * constants.k)
     Pr = nB / (N - nRejected)
 
     print('{0} particles transmitted, {1} particles rejected'

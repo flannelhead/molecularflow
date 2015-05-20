@@ -34,11 +34,12 @@ def cubeGrid(dimensions, origin, cellSize):
 
 
 # Trace a segment of a particle's travel
-def traceSegment(distance, remainder, dx, dt, p, s, v, arr, offset, nPoints):
+def traceSegment(distance, remainder, gridSize, dt, p, s, v, arr, offset,
+                 nPoints):
     ds = v * dt
     S = v * remainder
     while S < distance:
-        i = np.maximum(np.minimum(np.floor((p + S * s - offset) / dx),
+        i = np.maximum(np.minimum(np.floor((p + S * s - offset) / gridSize),
                        nPoints - 1), 0)
         arr[i[0], i[1], i[2]] += 1
         S += ds

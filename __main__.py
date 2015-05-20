@@ -27,4 +27,4 @@ parser.add_argument('--sample-mb', dest='sambleMB',
 
 args = parser.parse_args()
 runSimulation(args.A, args.B, Q=args.Q, Z=args.Z, T=args.T, N=args.N,
-              dx=args.grid_size, dt=args.dt, filename=args.filename)
+              gridSize=args.grid_size, dt=args.dt, filename=args.filename)
