@@ -17,7 +17,7 @@ parser.add_argument('-Z', type=float, help='Mass of the molecules [amu]',
 parser.add_argument('-T', type=float, help='Temperature of the system [K]',
                     default=300)
 parser.add_argument('--grid-size', type=float, help='Grid size [m]',
-                    default=0.2)
+                    default=0.25)
 parser.add_argument('--dt', type=float, help='Simulation timestep [s]',
                     default=0.005)
 parser.add_argument('--pulse', type=int, default=0,
