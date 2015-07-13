@@ -25,22 +25,29 @@ def newDirection(basis):
 
 
 # Create a cube grid for recording the particle locations
-def cubeGrid(dimensions, origin, cellSize):
+def cubeGrid(dimensions, origin, cellSize, steps, dt):
     nPoints = (dimensions / cellSize).astype(int)
-    arr = np.zeros(nPoints)
     grid = [np.linspace(0, dimensions[i], nPoints[i] + 1) + origin[i]
             for i in [0, 1, 2]]
+    steps = max(steps, 1)
+    arr = np.zeros(np.insert(nPoints, 0, steps))
     return arr, grid, nPoints
 
 
 # Trace a segment of a particle's travel
 def traceSegment(distance, remainder, gridSize, dt, p, s, v, arr, offset,
-                 nPoints):
+                 nPoints, steps, currentStep, isSteadyState):
     ds = v * dt
     S = v * remainder
     while S < distance:
         i = np.maximum(np.minimum(np.floor((p + S * s - offset) / gridSize),
                        nPoints - 1), 0)
-        arr[i[0], i[1], i[2]] += 1
+        if isSteadyState:
+            arr[0, i[0], i[1], i[2]] += 1
+        else:
+            if currentStep >= steps:
+                break
+            arr[currentStep, i[0], i[1], i[2]] += 1
+        currentStep += 1
         S += ds
-    return (S - distance) / v
+    return (S - distance) / v, currentStep
