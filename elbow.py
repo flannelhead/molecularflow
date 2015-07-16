@@ -43,12 +43,13 @@ def pipeABasis(pos):
     return np.array([[1, 0, 0], [0, -a, -b], [0, b, -a]])
 
 
-permXY = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]])
-
-
-# Pipe B is identical if we just permute the x and y components
 def pipeBBasis(pos):
-    return permXY.dot(pipeABasis(permXY.dot(pos)))
+    norm = pos[0]*pos[0] + pos[2]*pos[2]
+    a = pos[2] / norm
+    b = pos[0] / norm
+    return np.array([[0, a, -b], [1, 0, 0], [0, -b, -a]])
+
+permXY = np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]])
 
 
 # Functions to calculate distances to the surfaces
