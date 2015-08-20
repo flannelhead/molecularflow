@@ -1,3 +1,4 @@
+import time
 import numpy as np
 from scipy import constants
 import random as rnd
@@ -23,6 +24,8 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=50000, gridSize=0.25, dt=0.005,
     nRejected = 0
 
     print('Computing with A={0}, B={1}, N={2}'.format(A, B, N))
+
+    timestamp = time.time()
 
     for i in range(N):
         p, s = elbow.newParticle(A)
@@ -58,6 +61,9 @@ def runSimulation(A, B, Q=0.01, Z=28, T=300, N=50000, gridSize=0.25, dt=0.005,
 
     nArr *= Q*dt / (N * gridSize**3 * T * constants.k)
     Pr = nB / (N - nRejected)
+
+    print('Simulation finished in {0} seconds.'
+          .format(round(time.time() - timestamp)))
 
     # For the steady state calculation, the transmission probability is also
     # meaningful
