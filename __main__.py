@@ -27,8 +27,8 @@ parser.add_argument('--steps', type=int, default=0,
                     help='Number of timesteps to take, 0 means infinite '
                     ' (for steady state calculation)')
 parser.add_argument('--sample-mb', dest='sambleMB',
-                    action='store_false',
-                    default=True, help='Sample speeds from the MB '
+                    action='store_true',
+                    default=False, help='Sample speeds from the MB '
                     'distribution instead of using the mean')
 
 args = parser.parse_args()
