@@ -19,7 +19,7 @@ parser.add_argument('-T', type=float, help='Temperature of the system [K]',
 parser.add_argument('--grid-size', type=float, help='Grid size [m]',
                     default=0.25)
 parser.add_argument('--dt', type=float, help='Simulation timestep [s]',
-                    default=0.005)
+                    default=0.003)
 parser.add_argument('--pulse', type=int, default=0,
                     help='Duration of the gas pulse [timesteps],'
                     ' 0 means continuous')

@@ -6,7 +6,7 @@ from . import elbow
 from . import simulation
 
 
-def runSimulation(A, B, Q=0.01, Z=28, T=300, N=50000, gridSize=0.25, dt=0.005,
+def runSimulation(A, B, Q=0.01, Z=28, T=300, N=50000, gridSize=0.25, dt=0.0025,
                   pulse=0, steps=0, MAX_COLLISIONS=50, sampleMB=False,
                   filename=None):
     kOverM = constants.k / (Z * constants.value('atomic mass constant'))
