@@ -27,7 +27,7 @@ parser.add_argument('--pulse', type=int, default=0,
 parser.add_argument('--steps', type=int, default=0,
                     help='Number of timesteps to take, 0 means infinite '
                     ' (for steady state calculation)')
-parser.add_argument('--use-mean', dest='sambleMB',
+parser.add_argument('--use-mean', dest='sampleMB',
                     action='store_false',
                     default=True, help='Use the mean speed instead of '
                     'sampling from the MB distribution')
