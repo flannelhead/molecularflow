@@ -11,7 +11,8 @@ parser.add_argument('B', type=float, help='Tube dimension B [m]')
 parser.add_argument('filename', help='Filename (.npz) to save the results to')
 parser.add_argument('-N', type=int, help='Number of test particles',
                     default=50000)
-parser.add_argument('-Q', type=float, help='Flow rate [Pa m^3 / s]', default=0.01)
+parser.add_argument('-Q', type=float, help='Flow rate [Pa m^3 / s]',
+                    default=0.01)
 parser.add_argument('-Z', type=float, help='Mass of the molecules [amu]',
                     default=28)
 parser.add_argument('-T', type=float, help='Temperature of the system [K]',
@@ -34,4 +35,4 @@ parser.add_argument('--sample-mb', dest='sambleMB',
 args = parser.parse_args()
 runSimulation(args.A, args.B, Q=args.Q, Z=args.Z, T=args.T, N=args.N,
               gridSize=args.grid_size, dt=args.dt, pulse=args.pulse,
-              steps=args.steps, filename=args.filename)
+              steps=args.steps, sampleMB=args.sampleMB, filename=args.filename)
