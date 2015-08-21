@@ -27,10 +27,10 @@ parser.add_argument('--pulse', type=int, default=0,
 parser.add_argument('--steps', type=int, default=0,
                     help='Number of timesteps to take, 0 means infinite '
                     ' (for steady state calculation)')
-parser.add_argument('--sample-mb', dest='sambleMB',
-                    action='store_true',
-                    default=False, help='Sample speeds from the MB '
-                    'distribution instead of using the mean')
+parser.add_argument('--use-mean', dest='sambleMB',
+                    action='store_false',
+                    default=True, help='Use the mean speed instead of '
+                    'sampling from the MB distribution')
 
 args = parser.parse_args()
 runSimulation(args.A, args.B, Q=args.Q, Z=args.Z, T=args.T, N=args.N,

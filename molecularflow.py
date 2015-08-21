@@ -7,7 +7,7 @@ from . import simulation
 
 
 def runSimulation(A, B, Q=0.01, Z=28, T=300, N=50000, gridSize=0.25, dt=0.003,
-                  pulse=0, steps=0, MAX_COLLISIONS=50, sampleMB=False,
+                  pulse=0, steps=0, MAX_COLLISIONS=50, sampleMB=True,
                   filename=None):
     kOverM = constants.k / (Z * constants.value('atomic mass constant'))
 
